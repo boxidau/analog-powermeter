@@ -5,6 +5,7 @@ revkwh = 266.67     # Revolutions per kW Hour
 sampleCount = 6    # Number of samples in moving average
 sampleTime = 5.00  # Number of seconds per sample
 mouse = file('/dev/input/mouse0') # Mouse input device
+log = open('/var/log/power_usage', 'a') 
 
 def toSigned(n):  
   return n - ((0x80 & n) << 1)  
@@ -34,6 +35,7 @@ while True:
     sampleTimes.pop(0)
     samples.pop(0)
   
-  print calcPower()
-
-
+  power = calcPower()
+  log.write("%d %f\n" % (endTime, power))
+  log.flush()
+  print "%.3f kW" % (power) 
